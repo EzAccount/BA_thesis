@@ -1,0 +1,84 @@
+\section{Различные распределения}
+Обсудим теперь на какие классы распределений можно обобщить наше решение. Ограничимся $k$-точечными дискретными распределениями.
+Будем рассматривать только частный случай - вырожденную цепочку. Вышеописанная система уравнений (\ref{general}) позволяет построить решение в общем случае.
+
+4-точечное асимметричное распределение:
+\begin{equation*}
+P(h_n) =
+\begin{cases}
+p_1 &\mbox{для } h_n= +2h \\
+p_2 &\mbox{для } h_n= +h \\
+p_3 &\mbox{для } h_n= 0\\
+p_4 &\mbox{для } h_n = -h\\
+\end{cases}
+\end{equation*}
+
+Для такого распределения получим разностное уравнение следующего вида:
+\begin{equation}
+	p_4 x_{i+1} + p_3 x_{i} + p_2 x_{i-1} +p_1 x_{i-2} = x_{i}
+\end{equation}
+
+Соответствующее характеристическое уравнение запишется как:
+\begin{equation}
+	p_1+ p_2\lambda + (p_3-1) \lambda^2 + p_4 \lambda^3 = 0
+\end{equation}
+
+Нетрудно заметить, что $\lambda=1$ является корнем этого уравнения. Тогда:
+\begin{equation}
+(\lambda - 1)(p_4 \lambda^2 - (p_2 + p_1)\lambda - p_1	) =0
+\end{equation}
+
+Общее решение можно записать в виде:
+\begin{equation}
+x_i = A \lambda_1^i + B \lambda_2^i + C,
+\end{equation}
+где $\lambda_{1,2}$ корни соответствующего квадратного уравнения.
+Из граничных условий получим $A=-B$, $C=0$. Добавляя условие нормировки:
+\begin{equation}
+A \frac{1-\lambda_1^k}{1-\lambda_1} + B \frac{1-\lambda_2^k}{1-\lambda_2} =1
+\end{equation}
+получим:
+\begin{equation*}
+A=-B = \frac{(\lambda_1-1)(\lambda_2-1)}{\lambda_1(\lambda_1^k-1)(\lambda_2-1) - \lambda_2(\lambda_2^k-1)(\lambda_1-1)}
+\end{equation*}
+
+Рассмотрим теперь 5-модальное симметричное распределение:
+\begin{equation*}
+P(h_n) =
+\begin{cases}
+	p_1 &\mbox{для } h_n= +2h \\
+	p_2 &\mbox{для } h_n= +h \\
+	p_3 &\mbox{для } h_n= 0\\
+	p_2 &\mbox{для } h_n = -h\\
+	p_1&\mbox{для } h_n = -2h\\
+\end{cases}
+\end{equation*}
+Разностное уравнение имеет вид:
+\begin{equation*}
+p_1 x_{i-2} + p_2 x_{i-1} + p_3 x_i + p_2 x_{i+1} + p_1 x_{i+2} = x_i
+\end{equation*}
+А соответствующее характеристическое уравнение:
+\begin{equation*}
+p_1 + p_2 \lambda + (p_3-1) \lambda^2 + p_2 \lambda^3 + p1 \lambda^4 = 0
+\end{equation*}
+Заметим, что $\lambda_1=1$ является корнем этого уравнения с кратностью 2. Тогда уравнение можно переписать в следующем виде:
+\begin{equation*}
+(p_1\lambda^2 - (2p_1+p_2) \lambda + p_1) (\lambda - 1)^2 =0
+\end{equation*}
+Общее решение разностного уравнения:
+\begin{equation*}
+x_i = A + B i + C \lambda_1^i + D \lambda_2^i
+\end{equation*}
+Учитывая граничные условия:
+\begin{align*}
+B&=0 \\
+C&=A \frac{\left(\lambda_2^N-1\right)}{\lambda_1^N-\lambda_2^N} \\
+D&=A\frac{\left(\lambda_1^N-1\right)}{\lambda_1^N-\lambda_2^N} \\
+\end{align*}
+И  условие нормировки:
+\begin{equation*}
+	A^{-1} = k+\frac{\left(\lambda_2^N-1\right)}{\lambda_1^N-\lambda_2^N}\lambda_1 \frac{\lambda_1^N-1}{\lambda_1-1}+\frac{\left(\lambda_1^N-1\right)}{\lambda_1^N-\lambda_2^N}\lambda_2 \frac{\lambda_2^N-1}{\lambda_2-1}
+\end{equation*}
+
+ 
+
