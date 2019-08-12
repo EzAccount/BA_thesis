@@ -12,20 +12,34 @@
 \usepackage[T2A]{fontenc}
 \usepackage{tikz}	
 \usepackage{ntheorem}
+\usepackage{cleveref}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{chngcntr}
 \usetikzlibrary{automata,arrows,positioning,calc}
  \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \begin{document}
 \include{title}
 \newpage
+\numberwithin{equation}{section}
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
 \input{abstract}
+\newpage
+\tableofcontents
+\newpage
 \input{introduction}
 \input{problem}
 \input{limit}
+\input{exact_solution}
+\input{radius}
 \input{more_distributions}
-%\input{exact_solution}
+\input{numerical}
+\input{conclusions}
 
-
-
+\newpage
  \bibliographystyle{unsrt}
  \bibliography{lib}
+ \newpage
+ \input{code}
 \end{document}  

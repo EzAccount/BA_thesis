@@ -1,9 +1,9 @@
 \section{Различные распределения}
-Обсудим теперь на какие классы распределений можно обобщить наше решение. Ограничимся $k$-точечными дискретными распределениями.
+Обсудим теперь, на какие классы распределений можно обобщить наше решение. Ограничимся $k$-точечными дискретными распределениями.
 Будем рассматривать только частный случай - вырожденную цепочку. Вышеописанная система уравнений (\ref{general}) позволяет построить решение в общем случае.
 
 4-точечное асимметричное распределение:
-\begin{equation*}
+\begin{equation}
 P(h_n) =
 \begin{cases}
 p_1 &\mbox{для } h_n= +2h \\
@@ -11,7 +11,7 @@ p_2 &\mbox{для } h_n= +h \\
 p_3 &\mbox{для } h_n= 0\\
 p_4 &\mbox{для } h_n = -h\\
 \end{cases}
-\end{equation*}
+\end{equation}
 
 Для такого распределения получим разностное уравнение следующего вида:
 \begin{equation}
@@ -38,12 +38,16 @@ x_i = A \lambda_1^i + B \lambda_2^i + C,
 A \frac{1-\lambda_1^k}{1-\lambda_1} + B \frac{1-\lambda_2^k}{1-\lambda_2} =1
 \end{equation}
 получим:
-\begin{equation*}
+\begin{equation}
 A=-B = \frac{(\lambda_1-1)(\lambda_2-1)}{\lambda_1(\lambda_1^k-1)(\lambda_2-1) - \lambda_2(\lambda_2^k-1)(\lambda_1-1)}
-\end{equation*}
-
+\end{equation}
+Энергия основного состояния запишется следующим образом:
+\begin{multline}
+E_{gs} = J + J \text{mod} h p_2 b_n + J \text{mod} h p_4 a_n + p_4 b_0 h+\\
++ (h + J \text{mod} h p_1 b_n + p_1 a_1 h +p_1J \text{mod} h b_{n-1} + a_0 p_1 2 h + a_0 p_2 h 
+\end{multline}
 Рассмотрим теперь 5-модальное симметричное распределение:
-\begin{equation*}
+\begin{equation}
 P(h_n) =
 \begin{cases}
 	p_1 &\mbox{для } h_n= +2h \\
@@ -52,33 +56,39 @@ P(h_n) =
 	p_2 &\mbox{для } h_n = -h\\
 	p_1&\mbox{для } h_n = -2h\\
 \end{cases}
-\end{equation*}
+\end{equation}
 Разностное уравнение имеет вид:
-\begin{equation*}
-p_1 x_{i-2} + p_2 x_{i-1} + p_3 x_i + p_2 x_{i+1} + p_1 x_{i+2} = x_i
-\end{equation*}
-А соответствующее характеристическое уравнение:
-\begin{equation*}
-p_1 + p_2 \lambda + (p_3-1) \lambda^2 + p_2 \lambda^3 + p1 \lambda^4 = 0
-\end{equation*}
+\begin{equation}
+p_1 x_{i-2} + p_2 x_{i-1} + p_3 x_i + p_2 x_{i+1} + p_1 x_{i+2} = x_i,
+\end{equation}
+а соответствующее характеристическое уравнение:
+\begin{equation}
+p_1 + p_2 \lambda + (p_3-1) \lambda^2 + p_2 \lambda^3 + p_1 \lambda^4 = 0.
+\end{equation}
 Заметим, что $\lambda_1=1$ является корнем этого уравнения с кратностью 2. Тогда уравнение можно переписать в следующем виде:
-\begin{equation*}
+\begin{equation}
 (p_1\lambda^2 - (2p_1+p_2) \lambda + p_1) (\lambda - 1)^2 =0
-\end{equation*}
+\end{equation}
 Общее решение разностного уравнения:
-\begin{equation*}
+\begin{equation}
 x_i = A + B i + C \lambda_1^i + D \lambda_2^i
-\end{equation*}
+\end{equation}
 Учитывая граничные условия:
-\begin{align*}
+\begin{align}
+\begin{split}
 B&=0 \\
 C&=A \frac{\left(\lambda_2^N-1\right)}{\lambda_1^N-\lambda_2^N} \\
 D&=A\frac{\left(\lambda_1^N-1\right)}{\lambda_1^N-\lambda_2^N} \\
-\end{align*}
-И  условие нормировки:
-\begin{equation*}
+\end{split}
+\end{align}
+и условие нормировки:
+\begin{equation}
 	A^{-1} = k+\frac{\left(\lambda_2^N-1\right)}{\lambda_1^N-\lambda_2^N}\lambda_1 \frac{\lambda_1^N-1}{\lambda_1-1}+\frac{\left(\lambda_1^N-1\right)}{\lambda_1^N-\lambda_2^N}\lambda_2 \frac{\lambda_2^N-1}{\lambda_2-1}
-\end{equation*}
+\end{equation}
 
+Получаем искомую формулу для энергии основного состояния:
+\begin{multline}
+E_{gs} = J\text{mod} h (p_2 b_n+p_2 a_n) + (h +  J\text{mod} h) (p_1 a_n+p_1 b_n)+(p_1  a_1+p_1  b_1) h +\\+(J\text{mod} h) (p_1 a_n1+p_1 b_n1) + (p_2  a_0+p_2  b_0) h+( a_0 p_1+ b_0 p_1) 2 h
+\end{multline}
  
 

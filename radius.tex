@@ -1,0 +1,70 @@
+\section {Корреляционный  радиус системы}
+Возвращаясь к матрице перехода, можно так же установить следующий факт:
+	Пусть $r$ - корреляционный радиус системы. $\lambda_1 = 1 > \lambda_2 > \dots >\lambda_k$ - собственные значения матрицы перехода марковской цепи. Тогда:
+	\begin{equation}
+	r = -\frac{1}{\ln \lambda_2}
+	\end{equation}
+Чтобы убедиться в этом факте, рассмотрим довольно простое 2-точечное распределение следующего вида:
+\begin{equation}
+P(h_n) =
+\begin{cases}
+p_1 &\mbox{для } h_n= -h \\
+p_1 &\mbox{для } h_n= h\\
+\end{cases}
+\end{equation}
+Вычислим собственные значения матрицы перехода в соответствующем марковском процессе. Матрица имеет вид:
+\begin{equation}
+\begin{pmatrix}
+0.5 & 0.5 & 0 & \dots & 0 \\
+0.5 & 0 & 0.5 &\dots & 0\\
+\vdots & \vdots & \vdots & \vdots & \vdots\\
+0 & \dots & \dots & 0.5 & 0.5\\
+\end{pmatrix}
+\end{equation} 
+
+А задача о спектре такой матрицы представляет собой разностное уравнение:
+\begin{equation}
+	0.5 x_{k-1} - \lambda x_{k} + 0.5 \lambda x_{k+1} =0,
+\end{equation}
+с граничными условиями:
+\begin{align}
+\begin{split}
+	&x_0 = x_1\\
+	&x_k = x_{k+1}\\
+\end{split}
+\end{align}
+
+Общее решение имеет вид:
+\begin{equation}
+	x_i = A\nu_1^i + B\nu_2^i,
+\end{equation}
+где $\nu_1, nu_2$ - корни характеристического уравнения:
+\begin{equation}
+	\nu^2 - 2\lambda \nu + 1 = 0
+\end{equation}
+
+\begin{equation}
+	\nu_{1,2} = \lambda + i \sqrt{1 - \lambda^2}
+\end{equation}
+
+Чтобы задача имела решение, система граничных условий должна быть вырожденной:
+
+\begin{equation}
+	\det \begin{pmatrix} 
+	1 - \nu_1 & 1 - \nu_2 \\
+	\nu_1^k - \nu_1^{k+1} &  \nu_2^k - \nu_2^{k+1} \\
+	\end{pmatrix} = 0
+\end{equation}
+
+Или, вспоминая, что $\nu_1 \nu_2 = 1$
+\begin{equation}
+-\nu_1^{-k-1}-\nu_1 ^{1-k}+\nu_1 ^{k-1}+2 \nu_1 ^{-k}+\nu_1 ^{k+1}-2 \nu_1 ^k=0
+\end{equation}
+
+Получим, что:
+\begin{equation}
+\nu_1^k+1=0,
+\end{equation}
+т.е. $\nu$ это комплексные корни из $-1$. Вспоминая связь $\nu$ и $\lambda$ получаем, что $\lambda = \Re(\nu)$. Таким образом $\lambda_i = \cos(\frac{\pi + 2\pi i}{k}).$.
+
+Этот результат [пока еще нет, но обязательно будет] согласуется с формулой из \cite{farhi1993correlation}

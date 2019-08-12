@@ -2,8 +2,9 @@
 \section{Поиск предельного распределения}
 
 
-Чтобы найти предельное распределение рассмотрим частный случай вышеописанной марковской цепи: $\frac{2J}{h} \in \mathbb{Z}$. В таком случае цепь вырождается следующим образом:
-
+Чтобы найти предельное распределение рассмотрим частный случай вышеописанной марковской цепи: $\frac{2J}{h} \in \mathbb{Z}$. В таком случае цепь вырождается, как показано на Рис. \ref{mark_chain}.
+\begin{figure}[h!]
+	\centering
 	\begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2.5cm]
 \tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=1, minimum size=13mm]
 
@@ -27,24 +28,30 @@ edge[bend left]                node{$p_3$}           (E)
 edge[loop right]     node{$p_2+p_3$}         	(E);
 
 \end{tikzpicture}
-
+\caption{Вырождение графа в частном случае}
+\label{mark_chain}
+\end{figure}
 А уравнения для предельного распределения имеют вид:
-\begin{align*}
+\begin{align}
+\begin{split}
 x_i &= p_1 x_{i+1} + p_2 x_i + p_3 x_{i-1}\\
 x_0 &= (p_1 + p_2) x_0 + p_1 x_1\\
 x_k &= (p_2+p_3) x_k + p_3 x_{k-1},
-\end{align*}
+\end{split}
+\end{align}
 где $x_k$ - собственный вектор матрицы перехода.
 
 Система представляет собой разностное уравнение второго порядка с заданными граничными условиями. Будем искать решение в виде $x_n = A \lambda ^n$. Это приведёт нас к следующему характеристическому уравнению:
-\begin{equation*}
+\begin{equation}
 p_3 + (p_2 - 1) \lambda + p_1 \lambda^2 = 0
-\end{equation*}
+\end{equation}
 
 Общее решение тогда запишется в виде:
-   \[ x_n = A + B\left(\frac{p_3}{p_1} \right)^n=A+B t^n\]
+   \begin{equation}
+    x_n = A + B\left(\frac{p_3}{p_1} \right)^n=A+B t^n
+    \end{equation}
 
-Граничные условия накладывают ограничения на пространственно однородную часть ($A=0$) , и учитывая нормировку ($\sum x_i=1$) решение имеет вид ( при $t\neq 1$)
+Граничные условия накладывают ограничения на пространственно однородную часть ($A=0$) , и учитывая нормировку ($\sum x_i=1$), решение имеет вид ( при $t\neq 1$)
 \begin{equation}
 \label{sol}
 x_n = \frac{1-t}{1-t^{k+1}} t^n
@@ -55,32 +62,34 @@ x_n = \frac{1-t}{1-t^{k+1}} t^n
 	Характеристическое уравнение имеет корень $1$ и для более сложных распределений. Этот факт позволяет построить точные решения для более широкого класса систем.
 \end{zam}
 
-Имея точное решение для некоторого частного случая, вернёмся к решении в общем случае.
-\newtheorem*{hyp}{Гипотеза}
+Имея точное решение для некоторого частного случая, вернёмся к решению  общего случая.
 
-Вернёмся к исходной марковской цепи, уравнения для предельного состояния:
-\begin{align*}
+Рассмотрим уравнения для предельного состояния:
+\begin{align}
+\begin{split}
 a_i &= p_3 a_{i-1} + p_2 a_i + p_1 a_{i+1}\\
 b_i &= p_3 b_{i+1} + p_2 b_i + p_1 b_{i-1}\\
 a_0 &= (p_1 + p_2) a_0 + p_1 a_1 + p_1 b_k\\
 b_0 &= (p_2 + p_3) b_0 + p_3 b_1 + p_3 a_k \\
 a_k &= p_2 a_k + p_3 a_{k-1}\\
 b_k &= p_2 b_k + p_1 b_{k-1}\\
-\end{align*}
+\end{split}
+\end{align}
 и сложим уравнения для $a_i$ и $b_{k-i}$:
 \vspace{1cm}
 
-		\[
+\begin{equation}
 a_0+b_{k} = (p_1 + p_2) (a_0 +b_k)  + p_1 (a_1 + b_{k-1})
-\]
-\[
+\end{equation}
+\begin{equation}
 a_i + b _{k-i} = p_3 (a_0 + b_{k-i+1}) + p_2 (a_i + b_{k-i}) + p_1 (a_2 + b_{k-i-1})
-\]
-\[
+\end{equation}
+\begin{equation}
 a_k + b_0 = (p_2 + p_3) (a_k + b_0) +p_3(a_{k-1}+b_1)
-\]
+\end{equation}
 Схематично на рисунке это можно изобразить так:
-
+\begin{figure}[h!]
+\centering
 \begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2.7cm,scale=1]
 \tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=1, minimum size=14mm]
 
@@ -115,11 +124,13 @@ edge[bend left]node{$p_3$}         (F);
 \draw[red] ($(A)+(0,-2)$) ellipse (1.2cm and 3.5cm)node[yshift=4cm]{$a_0 + b_k$};
 \draw[red] ($(D)+(0,-2)$) ellipse (1.4cm and 3.5cm)node[yshift=4cm]{$a_k + b_0$};
 \end{tikzpicture}
-
-Таким образом для переменной $a_i + b_{k-i}$ получаем марковскую цепь аналогичную рассмотренному частному случаю для параметра $k_{int}= k$.
+\caption{"Склеивание" состояний марковской цепи}
+\end{figure}
+Таким образом для переменной $a_i + b_{k-i}$ получаем марковскую цепь, аналогичную рассмотренному частному случаю для параметра $k_{int}= k$.
 
 Произведём теперь сложение уравнение другим образом. Перейдём к набору переменных $a_1+b_k, a_2+b_{k-1}, \dots a_k + b_1$, оставляя крайними состояниями $a_0, b_0$.  Схематично это выглядит следующим образом:
-
+\begin{figure}[h!]
+\centering
 \begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2.7cm,scale=1]
 \tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=1, minimum size=14mm]
 
@@ -153,12 +164,12 @@ edge[bend left]node{$p_3$}         (G)
 edge[bend left]node{$p_3$}         (F);
 \draw[rotate around={-37:(5,5)},red] ($(B)+(-0.1,-2.5)$) ellipse (1.5cm and 4cm)node[yshift=3.5cm, xshift=1cm]{$a_1 + b_k$};
 \draw[rotate around={-37:(5,5)},red] ($(D)+(-0.1,-2.5)$) ellipse (1.5cm and 4cm)node[yshift=3.5cm, xshift=1cm]{$a_k + b_1$};
-
 \end{tikzpicture}
+\caption{Другой способ "склеивания" состояний}
+\end{figure}
+Для нового набора переменных $a_0, b_0, (a_i + b_{k-i+1})$, после сложения уравнений, получим марковскую цепь с параметром $k_{int} = k+1$.
 
-Для нового набора переменных $a_0, b_0, (a_i + b_{k-i+1})$  после сложения уравнений получим марковскую цепь с параметром $k_{int} = k+1$.
-
-Вспоминая решение ($\ref{sol}$) для этих цепей получаем систему на необходимые вероятности:
+Вспоминая решение ($\ref{sol}$) для этих цепей, получаем систему на необходимые вероятности:
 \begin{align}
 	\begin{split}
 	\label{general}
