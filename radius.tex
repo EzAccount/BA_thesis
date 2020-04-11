@@ -56,15 +56,16 @@ p_1 &\mbox{для } h_n= h\\
 	\end{pmatrix} = 0
 \end{equation}
 
-Или, вспоминая, что $\nu_1 \nu_2 = 1$
+Упрощая:
 \begin{equation}
--\nu_1^{-k-1}-\nu_1 ^{1-k}+\nu_1 ^{k-1}+2 \nu_1 ^{-k}+\nu_1 ^{k+1}-2 \nu_1 ^k=0
+(1-\nu_1)(\nu_2-1)(\nu_1^k-\nu_2^k)=0
+\end{equation}
+Или, вспоминая, что $\nu_1 \nu_2 = 1$ и учитывая, что $\nu_1, \nu2 \neq 1$, $\nu_1 \neq 0$
+\begin{equation}
+\nu_1^{2k}-1 = 0
 \end{equation}
 
-Получим, что:
-\begin{equation}
-\nu_1^k+1=0,
-\end{equation}
-т.е. $\nu$ это комплексные корни из $-1$. Вспоминая связь $\nu$ и $\lambda$ получаем, что $\lambda = \Re(\nu)$. Таким образом $\lambda_i = \cos(\frac{\pi + 2\pi i}{k}).$.
 
-Этот результат [пока еще нет, но обязательно будет] согласуется с формулой из \cite{farhi1993correlation}
+т.е. $\nu$ это комплексные корни из $1$. Вспоминая связь $\nu$ и $\lambda$ получаем, что $\lambda = \Re(\nu)$. Таким образом $\lambda_i = \cos(\frac{\pi (i-1)}{k}).$.
+
+Этот результат согласуется с формулой из \cite{farhi1993correlation}
