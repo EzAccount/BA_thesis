@@ -1,0 +1,439 @@
+
+\documentclass{beamer}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{amssymb,amsfonts,amsmath,mathtext}
+\usepackage{enumerate,float,indentfirst}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetikzlibrary{automata,arrows,positioning,calc}
+\hypersetup{unicode=true}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{graphics}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\setbeamertemplate{bibliography item}[text]
+\usetheme{Berlin}
+
+\title{Точное решение спиновой цепочки с замороженным беспорядком}
+
+\author[Михаил Тихонов]{Михаил Тихонов\\{\scriptsize  Научный руководитель: Коваль Г.В.}}
+\institute[Московский государственный университет им. М.В. Ломоносова]
+
+\date{2020}
+
+\subject{Математическая физика}
+
+\begin{document}
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+\begin{frame}{Формулировка задачи}
+    \begin{block}{Гамильтониан системы}
+    \begin{equation*}
+        H = -J \sum_{n=1}^N S_{n-1} S_n - \sum_{n=1}^N h_n S_n,
+    \end{equation*}
+    где $S_n$ - спиновые переменные, $N+1$ - количество спинов, $h_n$ - случайное поле.
+     \end{block}
+    Отметим, что энергия основного состояния в данной модели являются самоусредняющейся величиной.
+\end{frame}
+
+\begin{frame}{Реккурентные выражения}
+Минимальную энергию этой системы можно представить в виде: $
+E_{n+1} = - \varepsilon_{n+1} - H_{n+1} S_{n+1}$
+\pause
+\begin{block}{Имеют место следующие соотношения:}
+	\begin{equation*}
+	\varepsilon_{n+1} = \varepsilon_n - \frac{1} 2 \left(|h_n + H_n + J_n| + |h_n+H_n - J_n| \right)
+	\end{equation*}
+	\begin{equation*}
+	H_{n+1} = \frac{1}{2} \left(|h_n + H_n + J_n| - |h_n + H_n - J_n| \right)
+	\end{equation*}
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}
+Для определённости рассмотрим следующее распределение вероятностей для поля в ячейке $n$:
+\begin{equation*}
+P(h_n) =
+\begin{cases}
+p_1 &\mbox{для } h_n= -h \\
+p_2 &\mbox{для } h_n= 0 \\
+p_3 &\mbox{для } h_n= h\\
+\end{cases}
+\end{equation*}
+\begin{equation*}
+p_1+p_2+p_3 = 1
+\end{equation*}
+Обозначим
+	\begin{equation*}
+	k = \floor*{ \frac{2J}{h}}
+	\end{equation*}
+
+\end{frame}
+
+\begin{frame}{Марковская цепь}
+
+	\begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2.7cm,scale=0.5]
+	\tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=0.62, minimum size=14mm]
+	
+	\node[state,fill=red]    (A)                     {$-J$};
+	\node[state,fill=red]    (B)[right of=A]   {$-J+h$};
+	\node[draw=none]    (C)[right of=B]   {$\hspace{0.1in}\dots\hspace{0.1in}$};
+	\node[state, fill=red]    (D)[right of=C]   {$-J+kh$};
+	\node[state, fill=green]    (E)[below of=A,yshift=-25pt]{$J-kh$};
+	\node[draw=none]    (F)[right of=E] {$\hspace{0.1in}\dots\hspace{0.1in}$};
+	\node[state,fill=green]    (G)[right of=F] {$J-h$};
+	\node[state,fill=green]    (H)[below of=D,yshift=-25pt]{$J$};
+	
+	\path
+	(A) edge[loop left]     node{$p_1+p_2$}         (A)
+	edge[bend left]  node{$p_3$}     (B)
+	(B) edge[bend left]               node{$p_3$}           (C)
+			edge[bend left]                node{$p_1$}           (A)
+	(C) edge[bend left]               node{$p_3$}           (D)
+	edge[bend left]                node{$p_1$}           (B)
+	(D) edge               node{$p_3$}           (H)
+	edge[bend left]                node{$p_1$}           (C)
+
+	(H)  edge[bend left]                node{$p_1$}           (G)
+		edge[loop right]     node{$p_2+p_3$}         	(H)
+	(G) edge[bend left]                node{$p_1$}           (F)
+		  edge[bend left] node{$p_3$} (H)
+	(F) edge[bend left] 		        node{$p_1$}         (E)
+		edge[bend left]node{$p_3$}         (G)
+	
+	(E) edge 		        node{$p_1$}         (A)
+		edge[bend left]node{$p_3$}         (F);
+	
+	\end{tikzpicture}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Система уравнений}
+Для элементов инвариантного множества можно написать уравнения на вероятности:
+\begin{align*}
+    \label{eq:matrix}
+    \textcolor{red}{a}_i &= p_3 \textcolor{red}{a}_{i-1} + p_2 \textcolor{red}{a}_i + p_1 \textcolor{red}{a}_{i+1}\\
+    b_i &= p_3 b_{i+1} + p_2 b_i + p_1 b_{i-1}\\
+    \textcolor{red}{a}_0 &= (p_1 + p_2) \textcolor{red}{a}_0 + p_1 \textcolor{red}{a}_1 + p_1 b_k\\
+    b_0 &= (p_2 + p_3) b_0 + p_3 b_1 + p_3 \textcolor{red}{a}_k \\
+    \textcolor{red}{a}_k &= p_2 \textcolor{red}{a}_k + p_3 \textcolor{red}{a}_{k-1}\\
+    b_k &= p_2 b_k + p_1 b_{k-1}
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{$J/2h$ - целое}
+\scalebox{0.78}{
+	\begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2cm]
+\tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=1, minimum size=12mm]
+
+\node[state]    (A)                     {$-J$};
+\node[state]    (B)[right of=A]   {$-J+h$};
+\node[draw=none]    (C)[right of=B]   {$\hspace{0.2in}\dots\hspace{0.2in}$};
+\node[state]    (D)[right of=C]   {$J-h$};
+\node[state]    (E)[right of=D]   {$J$};
+
+
+\path
+(A) edge[loop left]     node{$p_1+p_2$}         (A)
+edge[bend left]  node{$p_3$}     (B)
+(B) edge[bend left]               node{$p_3$}           (C)
+edge[bend left]                node{$p_1$}           (A)
+(C) edge[bend left]               node{$p_3$}           (D)
+edge[bend left]                node{$p_1$}           (B)
+(D)  edge[bend left]                node{$p_1$}           (C)
+edge[bend left]                node{$p_3$}           (E)       	
+(E)  edge[bend left]                node{$p_1$}           (D)
+edge[loop right]     node{$p_2+p_3$}         	(E);
+
+\end{tikzpicture}
+}
+\begin{align*}
+		x_i &= p_1 x_{i+1} + p_2 x_i + p_3 x_{i-1}\\
+		x_0 &= (p_1 + p_2) x_0 + p_1 x_1\\
+		x_k &= (p_2+p_3) x_k + p_3 x_{k-1}
+\end{align*}\vspace{-.5cm}
+\begin{block}{Решение}
+	
+	\begin{equation*}
+	x_i = \frac{1-\frac{p_3}{p_1}}{1-\left(\frac{p_3}{p_1}\right)^{k+1}} \left(\frac{p_3}{p_1}\right)^i
+	\end{equation*}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Общий случай}
+	\begin{block}{Сложим уравнения для $a_i$ и $b_{k-i}$}
+		\vspace{-1mm}
+		\begin{equation*}
+		 a_0+b_{k} = (p_1 + p_2) (a_0 +b_k)  + p_1 (a_1 + b_{k-1})
+		\end{equation*}
+		\begin{equation*}
+		a_i + b _{k-i} = p_3 (a_0 + b_{k-i+1}) + p_2 (a_i + b_{k-i}) + p_1 (a_2 + b_{k-i-1})
+		\end{equation*}
+		\begin{equation*}
+		a_k + b_0 = (p_2 + p_3) (a_k + b_0) +p_3(a_{k-1}+b_1)
+		\end{equation*}
+	\end{block}
+	Для переменной $a_i + b_{k-i}$ получаем марковскую цепь аналогичную только что рассмотренному случаю для $k_{int}= k$
+\end{frame}
+
+\begin{frame}{Марковская цепь}
+
+\begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2.7cm,scale=0.5]
+\tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=0.62, minimum size=14mm]
+
+\node[state,fill=red]    (A)                     {$-J$};
+\node[state,fill=red]    (B)[right of=A]   {$-J+h$};
+\node[draw=none]    (C)[right of=B]   {$\hspace{0.1in}\dots\hspace{0.1in}$};
+\node[state, fill=red]    (D)[right of=C]   {$-J+kh$};
+\node[state, fill=green]    (E)[below of=A,yshift=-25pt]{$J-kh$};
+\node[draw=none]    (F)[right of=E] {$\hspace{0.1in}\dots\hspace{0.1in}$};
+\node[state,fill=green]    (G)[right of=F] {$J-h$};
+\node[state,fill=green]    (H)[below of=D,yshift=-25pt]{$J$};
+
+\path
+(A) edge[loop left]     node{$p_1+p_2$}         (A)
+edge[bend left]  node{$p_3$}     (B)
+(B) edge[bend left]               node{$p_3$}           (C)
+edge[bend left]                node{$p_1$}           (A)
+(C) edge[bend left]               node{$p_3$}           (D)
+edge[bend left]                node{$p_1$}           (B)
+(D) edge               node{$p_3$}           (H)
+edge[bend left]                node{$p_1$}           (C)
+
+(H)  edge[bend left]                node{$p_1$}           (G)
+edge[loop right]     node{$p_2+p_3$}         	(H)
+(G) edge[bend left]                node{$p_1$}           (F)
+edge[bend left] node{$p_3$} (H)
+(F) edge[bend left] 		        node{$p_1$}         (E)
+edge[bend left]node{$p_3$}         (G)
+
+(E) edge 		        node{$p_1$}         (A)
+edge[bend left]node{$p_3$}         (F);
+\draw[red] ($(A)+(0,-2)$) ellipse (1.2cm and 4.0cm)node[yshift=2.5cm]{$a_0 + b_k$};
+\draw[red] ($(D)+(0,-2)$) ellipse (1.4cm and 4.0cm)node[yshift=2.5cm]{$a_k + b_0$};
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Марковская цепь}
+
+\begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2.7cm,scale=0.5]
+\tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=0.62, minimum size=14mm]
+
+\node[state,fill=red]    (A)                     {$-J$};
+\node[state,fill=red]    (B)[right of=A]   {$-J+h$};
+\node[draw=none]    (C)[right of=B]   {$\hspace{0.1in}\dots\hspace{0.1in}$};
+\node[state, fill=red]    (D)[right of=C]   {$-J+kh$};
+\node[state, fill=green]    (E)[below of=A,yshift=-25pt]{$J-kh$};
+\node[draw=none]    (F)[right of=E] {$\hspace{0.1in}\dots\hspace{0.1in}$};
+\node[state,fill=green]    (G)[right of=F] {$J-h$};
+\node[state,fill=green]    (H)[below of=D,yshift=-25pt]{$J$};
+
+\path
+(A) edge[loop left]     node{$p_1+p_2$}         (A)
+edge[bend left]  node{$p_3$}     (B)
+(B) edge[bend left]               node{$p_3$}           (C)
+edge[bend left]                node{$p_1$}           (A)
+(C) edge[bend left]               node{$p_3$}           (D)
+edge[bend left]                node{$p_1$}           (B)
+(D) edge               node{$p_3$}           (H)
+edge[bend left]                node{$p_1$}           (C)
+
+(H)  edge[bend left]                node{$p_1$}           (G)
+edge[loop right]     node{$p_2+p_3$}         	(H)
+(G) edge[bend left]                node{$p_1$}           (F)
+edge[bend left] node{$p_3$} (H)
+(F) edge[bend left] 		        node{$p_1$}         (E)
+edge[bend left]node{$p_3$}         (G)
+
+(E) edge 		        node{$p_1$}         (A)
+edge[bend left]node{$p_3$}         (F);
+\draw[rotate around={-37:(5,5)},red] ($(B)+(-0.1,-2.5)$) ellipse (1.5cm and 4.5cm)node[yshift=2.4cm, xshift=0.7cm]{$a_1 + b_k$};
+\draw[rotate around={-37:(5,5)},red] ($(D)+(-0.1,-2.5)$) ellipse (1.5cm and 4.5cm)node[yshift=2.4cm, xshift=0.7cm]{$a_k + b_1$};
+
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}{Общий случай}
+	Аналогично для набора переменных $a_0, b_0, (a_i + b_{k-i+1})$ получим марковскую цепь с параметром $k_{int} = k+1$.
+	\begin{block}{Получаем систему на необходимые вероятности:}
+		\begin{align*}
+a_0 &= x^{k+1}_0\\
+b_0 &= x^{k+1}_{k+1}\\
+a_0 + b_{k} &= x^{k}_0\\
+a_k + b_0 &= x^k_k
+\end{align*}
+	\end{block}
+\end{frame}
+\begin{frame}{Точное выражение для энергии основного состояния}
+    \begin{block}{Выражение для энергии $E_{GS}$}
+    \begin{equation*}
+		J + h p_3 x^{k+1}_{k+1}  + h p_1 x^{k+1}_0 + (J \text{mod} h) (p_3 (x^k_k - x^{k+1}_{k+1}) +p_1(x^k_0-x^{k+1}_0))
+    \end{equation*}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Четырехточечное распределение}
+
+\begin{block}{4-точечное асимметричное распределение:}
+
+\begin{equation*}
+P(h_n) =
+\begin{cases}
+p_1 &\mbox{для } h_n= +2h \\
+p_2 &\mbox{для } h_n= +h \\
+p_3 &\mbox{для } h_n= 0\\
+p_4 &\mbox{для } h_n = -h\\
+\end{cases}
+\end{equation*}
+\end{block}
+\end{frame}
+
+\begin{frame}{Четырехточечное распределение}
+Разностное уравнение:
+\begin{equation*}
+	p_4 x_{i+1} + p_3 x_{i} + p_2 x_{i-1} +p_1 x_{i-2} = x_{i}
+\end{equation*}
+
+Характеристическое уравнение запишется как:
+\begin{equation*}
+	p_1+ p_2\lambda + (p_3-1) \lambda^2 + p_4 \lambda^3 = 0
+\end{equation*}
+
+$\lambda=1$ является корнем этого уравнения. Тогда:
+\begin{equation*}
+(\lambda - 1)(p_4 \lambda^2 - (p_2 + p_1)\lambda - p_1	) =0
+\end{equation*}
+    
+\end{frame}
+
+
+\begin{frame}{Четырехточечное распределение}
+Общее решение разностного уравнения тогда можно записать в виде:
+\begin{equation*}
+x_i = A \lambda_1^i + B \lambda_2^i + C,
+\end{equation*}
+где $\lambda_{1,2}$ корни соответствующего квадратного уравнения.
+Из граничных условий получим $A=-B$, $C=0$. Добавляя условие нормировки:
+\begin{equation*}
+A \frac{1-\lambda_1^k}{1-\lambda_1} + B \frac{1-\lambda_2^k}{1-\lambda_2} =1
+\end{equation*}
+получим:
+\begin{equation*}
+A=-B = \frac{(\lambda_1-1)(\lambda_2-1)}{\lambda_1(\lambda_1^k-1)(\lambda_2-1) - \lambda_2(\lambda_2^k-1)(\lambda_1-1)}
+\end{equation*}
+\end{frame}
+
+\begin{frame}{Четырехточечное распределение. Энергия.}
+\begin{block}{Энергия основного состояния запишется следующим образом:}
+\begin{multline}
+E_{gs} = J + J \text{mod} h p_2 b_n + J \text{mod} h p_4 a_n + p_4 b_0 h+\\
++ (h + J \text{mod} h p_1 b_n + p_1 a_1 h +p_1J \text{mod} h b_{n-1} + a_0 p_1 2 h + a_0 p_2 h 
+\end{multline}
+\end{block}
+\begin{block}{Замечание}
+Энергия $E_{gs}$ -- кусочно-линейная функция по шагу поля $h$
+\end{block}
+\end{frame}
+\begin{frame}{Гипотеза о корреляционном радиусе}
+	$\lambda_1 = 1 > \lambda_2 > \dots >\lambda_k$ - собственные значения матрицы перехода марковской цепи. Тогда:
+	\begin{equation*}
+	r = -\frac{1}{\ln \lambda_2}
+	\end{equation*}
+\end{frame}
+
+\begin{frame}{Численное моделирование}
+\begin{figure}[width=\textwidth]
+\begin{tikzpicture}[->, >=stealth', auto, semithick, node distance=2cm,scale=0.5]
+\tikzstyle{every state}=[fill=white,draw=black,thick,text=black,scale=1, minimum size=7mm]
+
+\node[state]    (A)                     {$S+$};
+\node[state]    (B)[below of=A]   {$i$};
+\node[state]    (C)[below of= B] {$S-$};
+\node[state]    (D)[left of=B] {$i-1$};
+\node[state]    (E)[left of=D]{$i-2$};
+
+\node[state]    (G)[right of=B] {$i+1$};
+\node[state]    (H)[right of=G]{$i+2$};
+
+\draw[-] (E) to node{$J$} (D);
+\draw[-] (D) to node{$J$} (B);
+\draw[-] (B) to node{$J$} (G);
+\draw[-] (G) to node{$J$} (H);
+
+
+\draw[-] (A) to node{$h_{i-2}$} (E);
+\draw[-] (A) to node{$h_{i}$} (B);
+\draw[-] (A) to node{$h_{i+1}$} (G);
+\draw[-](C) to node{$h_{i-1}$} (D);
+\draw[-](C) to node{$h_{i+2}$} (H);
+\end{tikzpicture}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Сравнение скоростей}
+    \begin{table}[h!]
+\centering
+\begin{tabular}{ |c|c|c| } 
+	\hline
+	Количество спинов & Push - Relabel & Рекур. соотношения \\
+	\hline
+	100 & 0.061 с & 0.002 c\\
+	\hline
+	1000 & 44.91 с & 0.010 c \\
+	\hline
+	2000 & 370.9 с & 0.015 c \\
+	\hline
+	3000 & 1216 с & 0.027 с \\
+	\hline
+\end{tabular}
+	\caption{Время выполнения для малых полей ($|h|<J/2$)}
+	\label{table1}
+\end{table}
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{ |c|c|c| } 
+		\hline
+		Количество спинов & Push - Relabel & Рекур. соотношения \\
+		\hline
+		1000 & 31.62 с & 0.0076 c\\
+		\hline
+		2000 & 258 с & 0.0142 c \\
+		\hline
+		3000 & 370.9 с & 0.015 c \\
+		\hline
+	\end{tabular}
+	\caption{Время выполнения в общем случае: $h_i \in [-4J, 4J]$}
+	\label{table3}
+\end{table}
+
+
+\end{frame}
+\begin{frame}{Результаты}
+\begin{itemize}
+    \item Аналитические формулы для средней энергии основного состояния для разных распределений
+    \item Энергия является кусочно-линейной функции дискретного шага поля
+    \item Приведен пример, подтверждающий гипотезу о корреляционном радиусе и втором собственном значении матрицы
+    \item Проведено исследование численных алгоритмов и их эффективности
+\end{itemize}
+
+\end{frame}
+
+\end{document}
